@@ -1,6 +1,6 @@
 // console.log('hi mostafizur')
-const loadNews = async() =>{
-    const url = 'https://openapi.programming-hero.com/api/news/category/01'
+const loadNews = async(category) =>{
+    const url = `https://openapi.programming-hero.com/api/news/category/${category}`
     
     const res = await fetch(url)
     const data = await res.json()
@@ -17,6 +17,7 @@ const displayNews = newses => {
 
 
     const newsContainer = document.getElementById('news-container')
+    newsContainer.textContent = ''
     newses.forEach(news => {
         // console.log(news._id)
         const cardDiv = document.createElement('div')
@@ -128,4 +129,70 @@ const displayNewsDetails = news =>{
 }
 // loadNewsDetails()
 
-loadNews()
+
+
+const categoryBar = document.getElementsByClassName('category-bar')
+// const category = categoryBar.childNodes.
+console.log(categoryBar)
+
+function getValue(isValue, num){
+    const navValue = document.getElementById(isValue)
+    navValue.classList.add('text-primary')
+    category = num;
+    loadNews(category)
+}
+
+
+
+
+function home(){
+    // categoryBar.classList.remove('text-primary')
+    // const home = document.getElementById('home')
+    // home.classList.add('text-primary')
+   const num = '08';
+    getValue('home',num)
+}
+function breakingNews(){
+    // categoryBar.classList.remove('text-primary')
+    // const breakingNews = document.getElementById('breakingNews')
+    // breakingNews.classList.add('text-primary')
+    // console.log(breakingNews)
+    const num = '01';
+    getValue('breakingNews',num)
+      
+}
+function regular(){
+    // categoryBar.classList.remove('text-primary')
+    // const regular = document.getElementById('regular')
+    // regular.classList.add('text-primary')
+    // console.log(regular)
+    const num = '02';
+    getValue('regular',num)
+      
+}
+function international(){   
+    const num = '03';
+    getValue('international',num)
+}
+function sports(){   
+    const num = '04';
+    getValue('sports',num)
+}
+function entertainment(){   
+    const num = '05';
+    getValue('entertainment',num)
+}
+function culture(){   
+    const num = '06';
+    getValue('culture',num)
+}
+function arts(){   
+    const num = '07';
+    getValue('arts',num)
+}
+function allNews(){   
+    const num = '08';
+    allNews('allNews',num)
+}
+
+loadNews('08')
