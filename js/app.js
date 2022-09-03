@@ -1,38 +1,65 @@
-// console.log('hi mostafizur')
-const loadNews = async(category) =>{
-    const url = `https://openapi.programming-hero.com/api/news/category/${category}`
+
+const loadNews = async(category_id) =>{
+    try{
+        const url = `https://openapi.programming-hero.com/api/news/category/${category_id}`
+        const res = await fetch(url);
+    const data = await res.json();
+    displayNews(data.data);
+    }
+    catch(e){
+
+        console.log('Fetch error: ', error);
+    }
     
-    const res = await fetch(url)
-    const data = await res.json()
-    displayNews(data.data)
+      
+    
+    
 
 }
 
 const displayNews = newses => {
-    console.log(newses)
+    // console.log(newses)
+ 
     const items = document.getElementById('news-count')
+
     items.innerHTML = `
-    <h3>${newses.length? newses.length : 'No'} items found for category Entertainment  </h3>
+    <h3>${newses.length? newses.length : 'No'} items found for category </h3>
     `
 
 
     const newsContainer = document.getElementById('news-container')
     newsContainer.textContent = ''
-    newses.forEach(news => {
-        // console.log(news._id)
+// note start
+// const numbers = [];
+// console.log(numbers)
+
+// note end
+newses.forEach(news => {
+    // console.log(news.total_view)
+    
+    // note start
+    
+    
+    // numbers.push(news.total_view)
+    
+        // numbers.sort()
+        
+        // note end
+
+
         const cardDiv = document.createElement('div')
-        // cardDiv.classList.add('row.g-0')
-        // console.log(cardDiv)
+    //    numbers.sort((b,a)=> a.total_view - b.total_view))
+        // cardDiv.classList.add('hi').innerHTML = 'numbers.sort((b,a)=> a - b))';
         cardDiv.innerHTML = `
-        <div class="card mb-3" >
+        <div class="card mb-4" >
             <div class="row  g-0 ">
                 <div class="col-md-4 my-0 mx-0">
                     <img src="${news.image_url}" class="img-fluid rounded-start" alt="...">
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-8">
                     <div class="card-body">
                         <h5 class="card-title">${news.title}</h5>
-                        <p class="card-text">${news.details.slice(0,100)}</p>
+                        <p class="card-text">${news.details.slice(0,150)}...</p>
 
                        
                     </div>
@@ -43,51 +70,54 @@ const displayNews = newses => {
                                     
                                     <div class="card border-0 mb-3 ">
                                     <div class="row g-0 align-items-center ">
-                                        <div class="col-md-4 ">
-                                        <img src="${news.author.img}" class="img-fluid rounded-circle align-middle w-50 " >
+                                        <div class="col-sm-4 ">
+                                        <img style="height:50px" src="${news.author.img}" class="img-thumbnail  rounded-circle align-middle w- " >
                                         </div>
-                                        <div class="col-md-8">
+                                        <div class="col-sm-8">
                                         <div class="card-body">
-                                            <h5 class="card-title text-start fs-5">${news.author.name}</h5>
+                                            <h5  class="card-title text-start fs-5">${news.author.name? news.author.name : 'No data Available'}</h5>
                                             
-                                            <p class="card-text text-start fs-6">${news.author.published_date}</p>
+                                            <p class="card-text text-start fs-6">${news.author.published_date ? news.author.published_date : '0'}</p>
                                         </div>
                                         </div>
                                     </div>
                                     </div>
 
                                 
-                                </div class="col-md-3">
+                                </div >
                                 
                                 <div class="col"> <i class="fa-solid fa-eye"></i>
-                                    ${news.total_view}
+                                    ${news.total_view? news.total_view : '0'}
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star-half-stroke"></i>
                                 </div>
+                                <div class="col-md-2 align-items-center justify-content-center ">
+                                <!-- Button trigger modal -->
+                                   <button onclick="loadNewsDetails('${news._id}')" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newsDetail">
+                                   <i class="fa-solid fa-right-long"></i>
+                                   </button>
+                                   
+                               </div>
                             </div>
                         </div>
                      
                     </div>
                 </div>
-                <div class="col-md-1 align-items-center justify-content-center ">
-                 <!-- Button trigger modal -->
-                    <button onclick="loadNewsDetails('${news._id}')" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newsDetail">
-                        Click
-                    </button>
-                    
-                </div>
+              
                         
             </div> 
         </div>
        
 
         `;
+        
+        
         newsContainer.appendChild(cardDiv)
         
     });
@@ -96,7 +126,6 @@ const displayNews = newses => {
 
 // modal
 const loadNewsDetails = async id =>{
-    // console.log(id)
     const url =`https://openapi.programming-hero.com/api/news/${id}`;
     const res = await fetch(url);
     const data = await res.json();
@@ -104,6 +133,7 @@ const loadNewsDetails = async id =>{
 }
 
 const displayNewsDetails = news =>{
+    
     // console.log(news)
     const newsDetailsModal = document.getElementById('newsDetailLabel')
     newsDetailsModal.innerText = news.title.slice(0, 20)
@@ -125,74 +155,56 @@ const displayNewsDetails = news =>{
     
     `;
     newsModalBody.appendChild(newsModalDiv)
-
-}
-// loadNewsDetails()
-
-
-
-const categoryBar = document.getElementsByClassName('category-bar')
-// const category = categoryBar.childNodes.
-console.log(categoryBar)
-
-function getValue(isValue, num){
-    const navValue = document.getElementById(isValue)
-    navValue.classList.add('text-primary')
-    category = num;
-    loadNews(category)
-}
-
-
-
-
-function home(){
-    // categoryBar.classList.remove('text-primary')
-    // const home = document.getElementById('home')
-    // home.classList.add('text-primary')
-   const num = '08';
-    getValue('home',num)
-}
-function breakingNews(){
-    // categoryBar.classList.remove('text-primary')
-    // const breakingNews = document.getElementById('breakingNews')
-    // breakingNews.classList.add('text-primary')
-    // console.log(breakingNews)
-    const num = '01';
-    getValue('breakingNews',num)
-      
-}
-function regular(){
-    // categoryBar.classList.remove('text-primary')
-    // const regular = document.getElementById('regular')
-    // regular.classList.add('text-primary')
-    // console.log(regular)
-    const num = '02';
-    getValue('regular',num)
-      
-}
-function international(){   
-    const num = '03';
-    getValue('international',num)
-}
-function sports(){   
-    const num = '04';
-    getValue('sports',num)
-}
-function entertainment(){   
-    const num = '05';
-    getValue('entertainment',num)
-}
-function culture(){   
-    const num = '06';
-    getValue('culture',num)
-}
-function arts(){   
-    const num = '07';
-    getValue('arts',num)
-}
-function allNews(){   
-    const num = '08';
-    allNews('allNews',num)
+    
+// Stop loader
+toggleSpinner(false)
 }
 
 loadNews('08')
+
+/*----------------- catagory area------------------- */
+
+const loadCatagory= async()=>{
+    const url="https://openapi.programming-hero.com/api/news/categories" 
+    const res=await fetch(url)
+    const data= await res.json()
+    displayCatagory(data.data.news_category)
+}
+
+const displayCatagory=catagories=>{
+    // console.log(catagories)
+    toggleSpinner(true)
+    
+    const catagoryField=document.getElementById('catagory-field')
+    catagoryField.innerHTML=''
+    catagories.forEach(catagory=>{
+        // console.log(catagory)
+        const catagoryDiv=document.createElement('div')
+        // catagoryDiv.classList.add('navbar navbar navbar-expand-lg bg-light')
+        catagoryDiv.innerHTML=`
+        <div class="btn rounded-5  ps-3 pe-3 " onclick="loadNews('${catagory.category_id}')"> ${catagory.category_name}</div>
+        
+        
+        `;
+        
+        catagoryField.appendChild(catagoryDiv)
+        
+    })
+    
+}
+
+
+// start loader
+const toggleSpinner = isLoading =>{
+    const loaderSection = document.getElementById('loader');
+    if(isLoading){
+        loaderSection.classList.remove('d-none')
+    }
+    else{
+        loaderSection.classList.add('d-none')
+
+    }
+}
+
+loadCatagory()
+
